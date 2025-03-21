@@ -25,19 +25,14 @@ static char *level_desc[] = {"DEBUG", "INFO", "NOTICE", "WARN", "ERROR", "FATAL"
 static sslog_t *g_log = NULL;
 
 int sslog_init(char *file, sslog_level log_level) {
-    if (!file || file[0] == '\0') {
-        fprintf(stderr, "log file is empty\n");
-        return _ERR;
-    }
     g_log = (sslog_t *)calloc(1, sizeof(sslog_t));
     if (!g_log) {
         fprintf(stderr, "alloc sslog_t failed\n");
         return _ERR;
     }
     FILE *fp = stdout;
-    if ((fp = fopen(file, "a")) == NULL) {
+    if (file && strlen(file) > 0 && (fp = fopen(file, "a")) == NULL) {
         fprintf(stderr, "can't open log file %s\n", file);
-        fp = stdout;
     }
     g_log->fp = fp;
     g_log->log_level = log_level;
